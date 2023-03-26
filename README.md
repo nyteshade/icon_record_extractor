@@ -29,5 +29,22 @@ Where
  RC is 1 for something went wrong
 ```
 
+## Examples
+
+```sh
+$ icon_records GenericFolder.icns
+```
+Will extract all records in the GenericFolder.icns in the current working directory
+
+```sh
+$ icon_records GenericFolder.icns ic10
+```
+Will extract the 1024x1024 ic10 file as `icn10.icns` in the current working directory
+
+```sh
+$ icon_records GenericFolder.icns dark GenericFolderDark.icns
+```
+Will extract the `FD D9 2F A8` special dark mode icon from the .icns file if there is one and provide the magic number and the associated size to allow it to function as an .icns file. Instead of dark.icns, this invocation will create GenericFolderDark.icns as the output.
+
 ## Credits
 Almost all impetus for this was gleaned from avl7771's archive https://github.com/avl7771/createicns
