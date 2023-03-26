@@ -62,6 +62,8 @@ bool WriteIcnsFileMetadata(FILE* file) {
 bool WriteRecord(const char *filename, Record *record)
 {
   FILE* out = fopen(filename, "wb+");
+  if (!out)
+    return 0;
 
   if (record->isIcon || record->isNestedIcon) WriteUint32('icns', out);
   if (record->isIcon || record->isNestedIcon) WriteUint32(0, out);
@@ -82,16 +84,33 @@ int main(int argc, char **argv) {
   
   Record record;
   char* idstring = NULL;
+  char* sDesiredName = NULL;
   long position = 0L;
   long eof = 0L;
-  bool isIcon = 1;
+  int wroteCount = 0;
+  int failure = 0;
   
   uint32_t kDark = '\xfd\xd9\x2f\xa8';
+  uint32_t tDesired = 0;
   
   if (!file) 
   {
     printf("Cannot open file %s\n", argv[1]);
     return 1;
+  }
+  
+  if (argc > 2) 
+  {
+    if (strcmp("dark", argv[2]) == 0)
+      tDesired = kDark;
+    else
+      tDesired = (argv[2][0] << 24) | (argv[2][1] << 16) | (argv[2][2] << 8) | argv[2][3];
+      
+    if (argc > 3) 
+    {
+      sDesiredName = calloc(1, strlen(argv[3]));
+      strcpy(sDesiredName, argv[3]);
+    }
   }
   
   fseek(file, 0, SEEK_END);
@@ -136,12 +155,27 @@ int main(int argc, char **argv) {
       record.isIcon = 0;
     }
 
-    WriteRecord(idstring, &record);      
+    if (!tDesired || (tDesired && tDesired == record.header.identifier))
+    {
+      failure = !WriteRecord(sDesiredName ? sDesiredName : idstring, &record); 
+      if (!failure)
+        wroteCount++;    
+    }
+    else
+    {
+      printf("[Skipping...]\n");
+    } 
     free(idstring);
   }
   
+  if (sDesiredName)
+    free(sDesiredName);
+    
   fclose(file);
     
-  return 0;
+  if (tDesired && wroteCount == 0)
+    failure = 1;
+    
+  return failure;
 }
 
