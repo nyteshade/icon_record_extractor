@@ -15,7 +15,19 @@ The logic is simple and there is almost no error handling in this release. The i
 Any error handling.
 
 ## Instructions
-In the shell, invoked `icon_records` with the first parameter being the .icns source file. All created files will be extracted in the current working directory. Sorry, just serving a need atm.
+```sh
+Usage: icon_records <file.icns> [<identifier> [<outputPathAndName>]]
+Where
+  <file.icns>          - replace this with the name of the icns file to extract from
+  <identifier>         - optionally only extract a single record's data. Supply the
+                         four letter identifier for the record. Use "dark" for darkmode
+                         icons. These are usually only Apple system folder icons.
+  <outputPathAndName>  - an optional name other than "<identifier>.icns". Only used when
+                         desired record exsits and is found and is extracted.
+                         
+ RC is 0 for success
+ RC is 1 for something went wrong
+```
 
 ## Credits
 Almost all impetus for this was gleaned from avl7771's archive https://github.com/avl7771/createicns
