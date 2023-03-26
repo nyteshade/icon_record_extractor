@@ -14,5 +14,8 @@ The logic is simple and there is almost no error handling in this release. The i
 ## Missing?
 Any error handling.
 
+## Instructions
+In the shell, invoked `icon_record` with the first parameter being the .icns source file. All created files will be extracted in the current working directory. Sorry, just serving a need atm.
+
 ## Credits
 Almost all impetus for this was gleaned from avl7771's archive https://github.com/avl7771/createicns
